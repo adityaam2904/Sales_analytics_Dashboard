@@ -1,0 +1,11 @@
+customer_id,name,email,city,country,signup_date
+CUST001,Alice Johnson,alice.j@example.com,New York,USA,2023-01-15
+CUST002,Bob Smith,bob.smith@example.com,London,UK,2023-02-20
+CUST003,Charlie Brown,charlie.b@example.com,Toronto,Canada,2023-03-05
+CUST004,Diana Prince,diana.p@example.com,Sydney,Australia,2023-04-12
+CUST005,Evan Turner,evan.t@example.com,Berlin,Germany,2023-05-01
+CUST006,Fiona Green,fiona.g@example.com,Mumbai,India,2023-06-18
+CUST007,George Hall,george.h@example.com,Paris,France,2023-07-22
+CUST008,Hannah White,hannah.w@example.com,Tokyo,Japan,2023-08-30
+CUST009,InvalidEmail,not-an-email,Dubai,UAE,2023-09-10
+CUST001,Alice Johnson,alice.j@example.com,New York,USA,2023-01-15

@@ -1,0 +1,28 @@
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (keep credentials safe)
+.env
+
+# Uploaded CSV files (don't push user uploads to GitHub)
+backend/uploads/
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node / React (for later)
+node_modules/
+dist/
+build/
+frontend/.env

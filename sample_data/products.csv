@@ -1,0 +1,11 @@
+product_id,name,category,unit_price,stock
+PROD001,Wireless Headphones,Electronics,149.99,50
+PROD002,Ergonomic Office Chair,Furniture,229.50,20
+PROD003,Mechanical Keyboard,Electronics,89.00,75
+PROD004,Steel Water Bottle,Accessories,24.99,200
+PROD005,Coffee Mug,Accessories,12.50,150
+PROD006,Standing Desk,Furniture,399.00,15
+PROD007,Webcam HD,Electronics,79.99,60
+PROD008,Notebook Set,Stationery,15.00,300
+PROD009,Broken Widget,-15.00,Gadgets,30
+PROD010,Desk Lamp,Furniture,45.00,80
