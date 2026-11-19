@@ -4,6 +4,8 @@ An enterprise-grade sales analytics platform and automated ETL pipeline built wi
 
 Users can upload raw CSV datasets, automatically validate and clean data through an ETL pipeline, persist structured records in PostgreSQL with idempotent upserts, quarantine dirty records with exact rejection diagnostics, view dynamic real-time analytical dashboards, and interact with a live **AI Sales Assistant** connected directly to the database.
 
+**GitHub Repository:** [https://github.com/adityaam2904/Sales_analytics_Dashboard](https://github.com/adityaam2904/Sales_analytics_Dashboard)
+
 ---
 
 ## 🛠️ System Architecture & Technology Stack
@@ -21,7 +23,7 @@ Users can upload raw CSV datasets, automatically validate and clean data through
 ## 📂 Project Structure
 
 ```text
-sales-analytics-platform/
+Sales_analytics_Dashboard/
 │
 ├── database/
 │   └── schema.sql              # 7-table schema with constraints, indexes & JSONB
@@ -75,15 +77,15 @@ sales-analytics-platform/
 ## 💾 Database Architecture (7 Tables)
 
 ### Business Domain:
-1. **`customers`**: Stores verified customer profiles (`customer_id` [PK], `name`, `email` [UNIQUE], `city`, `country`, `signup_date`).
-2. **`products`**: Product catalog (`product_id` [PK], `name`, `category`, `unit_price` [CHECK > 0], `stock` [CHECK >= 0]).
-3. **`orders`**: Sales transactions (`order_id` [PK], `customer_id` [FK], `product_id` [FK], `quantity` [CHECK > 0], `unit_price`, `discount_pct`, `total_amount`, `order_date`, `status`).
+* **`customers`**: Stores verified customer profiles (`customer_id` [PK], `name`, `email` [UNIQUE], `city`, `country`, `signup_date`).
+* **`products`**: Product catalog (`product_id` [PK], `name`, `category`, `unit_price` [CHECK > 0], `stock` [CHECK >= 0]).
+* **`orders`**: Sales transactions (`order_id` [PK], `customer_id` [FK], `product_id` [FK], `quantity` [CHECK > 0], `unit_price`, `discount_pct`, `total_amount`, `order_date`, `status`).
 
 ### ETL & Monitoring Domain:
-4. **`uploaded_files`**: Tracks every file uploaded with its **SHA-256 hash** (`CHAR(64)`) to block duplicate uploads before ingestion.
-5. **`etl_runs`**: Records run metadata (`mode`, `status`, `rows_read`, `rows_inserted`, `rows_updated`, `rows_unchanged`, `rows_rejected`, `duration`).
-6. **`etl_logs`**: Line-by-line runtime logs (`INFO`, `WARNING`, `ERROR`) linked to specific runs.
-7. **`rejected_records`**: Quarantines dirty records with exact failure reasons and original inputs stored in **`JSONB`**, enforced by a composite unique constraint `(upload_id, row_number)`.
+* **`uploaded_files`**: Tracks every file uploaded with its **SHA-256 hash** (`CHAR(64)`) to block duplicate uploads before ingestion.
+* **`etl_runs`**: Records run metadata (`mode`, `status`, `rows_read`, `rows_inserted`, `rows_updated`, `rows_unchanged`, `rows_rejected`, `duration`).
+* **`etl_logs`**: Line-by-line runtime logs (`INFO`, `WARNING`, `ERROR`) linked to specific runs.
+* **`rejected_records`**: Quarantines dirty records with exact failure reasons and original inputs stored in **`JSONB`**, enforced by a composite unique constraint `(upload_id, row_number)`.
 
 ---
 
@@ -123,7 +125,7 @@ pip install -r requirements.txt
 # Start the FastAPI server
 uvicorn main:app --reload
 ```
-* Interactive Swagger API docs: `http://127.0.0.1:8000/docs`
+* **Interactive Swagger API Documentation:** `http://127.0.0.1:8000/docs`
 
 ### 3. Frontend Setup
 Open a second terminal:
@@ -136,7 +138,7 @@ npm install
 # Start Vite development server
 npm run dev
 ```
-* Web Application: `http://localhost:5173/`
+* **Web Application:** `http://localhost:5173/`
 
 ---
 
