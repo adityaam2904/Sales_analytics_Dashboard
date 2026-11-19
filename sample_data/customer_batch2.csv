@@ -1,0 +1,4 @@
+customer_id,name,email,city,country,signup_date
+CUST001,Alice Johnson,alice.j@example.com,San Francisco,USA,2023-01-15
+CUST002,Bob Smith,bob.smith@example.com,London,UK,2023-02-20
+CUST010,Zack Taylor,zack.t@example.com,Austin,USA,2023-10-01

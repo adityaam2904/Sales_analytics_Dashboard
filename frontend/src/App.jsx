@@ -1,122 +1,67 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import Dashboard   from "./pages/Dashboard";
+import Customers   from "./pages/Customers";
+import Products    from "./pages/Products";
+import Orders      from "./pages/Orders";
+import Upload      from "./pages/Upload";
+import ETLMonitor  from "./pages/ETLMonitor";
 
-function App() {
-  const [count, setCount] = useState(0)
+const navItems = [
+  { path: "/",            label: "📊 Dashboard"    },
+  { path: "/customers",   label: "👥 Customers"    },
+  { path: "/products",    label: "📦 Products"     },
+  { path: "/orders",      label: "🧾 Orders"       },
+  { path: "/upload",      label: "📁 Upload CSV"   },
+  { path: "/etl",         label: "⚙️ ETL Monitor"  },
+];
 
+export default function App() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <div className="flex h-screen bg-gray-100">
 
-      <div className="ticks"></div>
+        {/* Sidebar */}
+        <aside className="w-64 bg-gray-900 text-white flex flex-col">
+          <div className="p-6 border-b border-gray-700">
+            <h1 className="text-xl font-bold text-white">Sales Analytics</h1>
+            <p className="text-gray-400 text-sm mt-1">Platform</p>
+          </div>
+          <nav className="flex-1 p-4 space-y-1">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === "/"}
+                className={({ isActive }) =>
+                  `block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-300 hover:bg-gray-700"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="p-4 border-t border-gray-700 text-xs text-gray-500">
+            Sales Analytics Platform v1.0
+          </div>
+        </aside>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Main Content */}
+        <main className="flex-1 overflow-auto">
+          <Routes>
+            <Route path="/"           element={<Dashboard />}  />
+            <Route path="/customers"  element={<Customers />}  />
+            <Route path="/products"   element={<Products />}   />
+            <Route path="/orders"     element={<Orders />}     />
+            <Route path="/upload"     element={<Upload />}     />
+            <Route path="/etl"        element={<ETLMonitor />} />
+          </Routes>
+        </main>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </div>
+    </BrowserRouter>
+  );
 }
-
-export default App

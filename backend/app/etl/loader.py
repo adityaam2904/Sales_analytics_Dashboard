@@ -10,7 +10,7 @@ def load_customers(df: pd.DataFrame, db: Session) -> dict:
     """
     Upsert customers into PostgreSQL.
     - If customer_id exists → update name, email, city, country, signup_date
-    - If customer_id is new → insert
+- If customer_id is new → insert
     """
     inserted = updated = unchanged = 0
 

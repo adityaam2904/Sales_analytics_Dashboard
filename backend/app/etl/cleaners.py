@@ -3,14 +3,17 @@ import numpy as np
 import re
 from datetime import datetime
 
-# ─────────────────────────────────────────────
-# HELPER FUNCTIONS
-# ─────────────────────────────────────────────
-
+# It checks whether the email is in valid format using a regex pattern. It returns True if the email is valid, otherwise False.
+# w -> all alphabets , digits and underscore
+# + -> one or more occurrences of the preceding element
+# \. -> literal dot
+# \w{2,} -> two or more word characters (the domain extension)
 def is_valid_email(email: str) -> bool:
     """Check if email matches standard format."""
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w{2,}$'
     return bool(re.match(pattern, str(email).strip()))
+
+
 
 def clean_string(value) -> str:
     """Strip whitespace and normalize a string value."""

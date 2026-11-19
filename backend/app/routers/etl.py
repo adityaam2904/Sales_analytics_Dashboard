@@ -45,7 +45,7 @@ def trigger_etl(
         db.execute(text("""
             UPDATE uploaded_files
             SET status = 'uploaded'
-            WHERE status = 'processed'
+            WHERE status IN  ('processed','failed')
         """))
         db.commit()
 
