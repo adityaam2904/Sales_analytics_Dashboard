@@ -5,7 +5,7 @@ import Products    from "./pages/Products";
 import Orders      from "./pages/Orders";
 import Upload      from "./pages/Upload";
 import ETLMonitor  from "./pages/ETLMonitor";
-
+import Chat        from "./pages/chat";
 const navItems = [
   { path: "/",            label: "📊 Dashboard"    },
   { path: "/customers",   label: "👥 Customers"    },
@@ -13,6 +13,7 @@ const navItems = [
   { path: "/orders",      label: "🧾 Orders"       },
   { path: "/upload",      label: "📁 Upload CSV"   },
   { path: "/etl",         label: "⚙️ ETL Monitor"  },
+  { path: "/chat",        label: "💬 Chatbot"          }
 ];
 
 export default function App() {
@@ -58,6 +59,7 @@ export default function App() {
             <Route path="/orders"     element={<Orders />}     />
             <Route path="/upload"     element={<Upload />}     />
             <Route path="/etl"        element={<ETLMonitor />} />
+            <Route path="/chat"       element={<Chat />}       />
           </Routes>
         </main>
 
