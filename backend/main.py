@@ -5,6 +5,7 @@ from app.routers import upload
 from app.routers import etl
 from app.routers import dashboard
 from app.routers import data
+from app.routers import chat
 app = FastAPI(
     title="Sales Analytics API",
     description="Backend API for the Sales Analytics Dashboard",
@@ -30,6 +31,8 @@ app.include_router(upload.router)
 app.include_router(etl.router)
 app.include_router(dashboard.router)
 app.include_router(data.router)
+app.include_router(chat.router)
+
 @app.get("/")
 def root():
     return {"message": "Sales Analytics API is running ✅"}
