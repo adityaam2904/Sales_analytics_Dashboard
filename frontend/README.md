@@ -1,8 +1,8 @@
-# 🚀 Full-Stack Sales Analytics, Automated ETL & AI Platform
+# 🚀 Full-Stack Sales Analytics & Automated ETL Platform
 
-An enterprise-grade sales analytics platform and automated ETL pipeline built with **PostgreSQL**, **Python (FastAPI + Pandas)**, **React.js (Tailwind CSS + Recharts)**, and **Google Gemini GenAI**.
+An enterprise-grade sales analytics platform and automated ETL pipeline built with **PostgreSQL**, **Python (FastAPI + Pandas)**, and **React.js (Tailwind CSS + Recharts)**.
 
-Users can upload raw CSV datasets, automatically validate and clean data through an ETL pipeline, persist structured records in PostgreSQL with idempotent upserts, quarantine dirty records with exact rejection diagnostics, view dynamic real-time analytical dashboards, and interact with a live **AI Sales Assistant** connected directly to the database.
+Users can upload raw CSV datasets, automatically validate and clean data through an ETL pipeline, persist structured records in PostgreSQL with idempotent upserts, quarantine dirty records with exact rejection diagnostics, and view dynamic real-time analytical dashboards.
 
 **GitHub Repository:** [https://github.com/adityaam2904/Sales_analytics_Dashboard](https://github.com/adityaam2904/Sales_analytics_Dashboard)
 
@@ -12,11 +12,10 @@ Users can upload raw CSV datasets, automatically validate and clean data through
 
 | Layer | Technologies | Key Responsibilities |
 | :--- | :--- | :--- |
-| **Frontend** | React 18 (Vite), Tailwind CSS, Recharts, React Router, React Markdown, Axios | Executive KPI cards, interactive sales charts, CSV upload staging portal, server-side paginated data tables, live ETL execution console, and AI Chatbot interface. |
-| **Backend REST API** | Python 3.10+, FastAPI, SQLAlchemy, Pydantic, Uvicorn | RESTful endpoints for multipart file uploads, ETL pipeline orchestration, paginated filtering APIs, analytical SQL aggregations, and AI prompt engineering with live DB context. |
+| **Frontend** | React 18 (Vite), Tailwind CSS, Recharts, React Router, Axios | Executive KPI cards, interactive sales charts, CSV upload staging portal, server-side paginated data tables, and live ETL execution console. |
+| **Backend REST API** | Python 3.10+, FastAPI, SQLAlchemy, Pydantic, Uvicorn | RESTful endpoints for multipart file uploads, ETL pipeline orchestration, paginated filtering APIs, and analytical SQL aggregations. |
 | **ETL Engine** | Pandas, NumPy, hashlib | CSV parsing, schema normalization, regex validation, mathematical recalculations, quarantine separation, and idempotent upserts to PostgreSQL. |
 | **Database** | PostgreSQL | 3 core business tables + 4 ETL tracking tables with primary/foreign keys, check constraints, composite unique constraints, JSONB error storage, and B-Tree indexes. |
-| **AI Layer** | Google GenAI SDK (`gemini-3.5-flash-lite`, `gemini-3.8-flash`) | Context-aware AI assistant querying live PostgreSQL metrics to answer natural language business questions. |
 
 ---
 
@@ -37,7 +36,7 @@ Sales_analytics_Dashboard/
 ├── backend/
 │   ├── main.py                 # FastAPI application root, CORS & router registrations
 │   ├── requirements.txt        # Backend dependencies
-│   ├── .env                    # Database credentials & Gemini API Key
+│   ├── .env                    # Database credentials
 │   ├── uploads/                # Staging directory for uploaded CSVs
 │   └── app/
 │       ├── database.py         # SQLAlchemy engine, connection pool & session generator
@@ -49,8 +48,7 @@ Sales_analytics_Dashboard/
 │           ├── uploads.py      # Upload endpoint & SHA-256 duplicate checking
 │           ├── etl.py          # Trigger ETL, run histories, logs & rejected rows
 │           ├── dashboard.py    # Analytical queries (revenue, monthly trend, top items)
-│           ├── data.py         # Paginated customer, product & order exploration
-│           └── chat.py         # AI chatbot endpoint with dynamic PostgreSQL context
+│           └── data.py         # Paginated customer, product & order exploration
 │
 ├── frontend/
 │   ├── src/
@@ -61,8 +59,7 @@ Sales_analytics_Dashboard/
 │   │   │   ├── Products.jsx    # Products catalog, inventory status & revenue stats
 │   │   │   ├── Orders.jsx      # Order transactions and status filters
 │   │   │   ├── Upload.jsx      # CSV upload portal & duplicate hash warning
-│   │   │   ├── ETLMonitor.jsx  # Pipeline trigger, live logs & rejected rows inspector
-│   │   │   └── Chat.jsx        # AI Assistant with live DB context & markdown rendering
+│   │   │   └── ETLMonitor.jsx  # Pipeline trigger, live logs & rejected rows inspector
 │   │   ├── App.jsx             # Sidebar navigation & React Router setup
 │   │   └── index.css           # Tailwind CSS directives
 │   ├── package.json
@@ -78,86 +75,145 @@ Sales_analytics_Dashboard/
 
 ### Business Domain:
 * **`customers`**: Stores verified customer profiles (`customer_id` [PK], `name`, `email` [UNIQUE], `city`, `country`, `signup_date`).
-* **`products`**: Product catalog (`product_id` [PK], `name`, `category`, `unit_price` [CHECK > 0], `stock` [CHECK >= 0]).
-* **`orders`**: Sales transactions (`order_id` [PK], `customer_id` [FK], `product_id` [FK], `quantity` [CHECK > 0], `unit_price`, `discount_pct`, `total_amount`, `order_date`, `status`).
+* **`products`**: Product catalog (`product_id` [PK], `name`, `category`, `unit_price` [CHECK > 0], `stock_quantity` [CHECK >= 0]).
+* **`orders`**: Sales transactions (`order_id` [PK], `customer_id` [FK], `product_id` [FK], `quantity` [CHECK > 0], `unit_price`, `discount_pct`, `total_amount`, `order_date`, `status`). All financial amounts use `NUMERIC(12, 2)` to eliminate floating-point rounding errors.
 
 ### ETL & Monitoring Domain:
 * **`uploaded_files`**: Tracks every file uploaded with its **SHA-256 hash** (`CHAR(64)`) to block duplicate uploads before ingestion.
-* **`etl_runs`**: Records run metadata (`mode`, `status`, `rows_read`, `rows_inserted`, `rows_updated`, `rows_unchanged`, `rows_rejected`, `duration`).
+* **`etl_runs`**: Records run metadata (`mode`, `status`, `rows_read`, `rows_inserted`, `rows_updated`, `rows_unchanged`, `rows_rejected`, `duration_seconds`).
 * **`etl_logs`**: Line-by-line runtime logs (`INFO`, `WARNING`, `ERROR`) linked to specific runs.
 * **`rejected_records`**: Quarantines dirty records with exact failure reasons and original inputs stored in **`JSONB`**, enforced by a composite unique constraint `(upload_id, row_number)`.
 
 ---
 
-## ⚡ Setup & Execution Guide
+## ⚡ Complete Setup & Execution Guide
 
-### 1. Database Setup
-Ensure PostgreSQL is running locally and execute the schema:
+Follow these steps sequentially to set up and run the entire platform from scratch:
+
+### Step 1: Clone the Repository
 ```bash
-psql -U postgres -c "CREATE DATABASE sales_analytics;"
-psql -U postgres -d sales_analytics -f database/schema.sql
+git clone https://github.com/adityaam2904/Sales_analytics_Dashboard.git
+cd Sales_analytics_Dashboard
 ```
-
-### 2. Backend Setup
-```bash
-cd backend
-
-# Create and activate virtual environment
-python -m venv venv
-
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-# source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment variables in backend/.env:
-# DB_HOST=localhost
-# DB_PORT=5432
-# DB_NAME=sales_analytics
-# DB_USER=postgres
-# DB_PASSWORD=your_password
-# UPLOAD_DIR=uploads
-# GEMINI_API_KEY=your_gemini_api_key
-
-# Start the FastAPI server
-uvicorn main:app --reload
-```
-* **Interactive Swagger API Documentation:** `http://127.0.0.1:8000/docs`
-
-### 3. Frontend Setup
-Open a second terminal:
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start Vite development server
-npm run dev
-```
-* **Web Application:** `http://localhost:5173/`
 
 ---
 
-## 🧪 Testing the Complete System Workflow
+### Step 2: Database Initialization (PostgreSQL)
 
-1. **Upload Datasets**:
-   - Navigate to **📁 Upload CSV** (`/upload`).
-   - Upload `sample_data/customers.csv`, `products.csv`, and `orders.csv`.
-   - Re-uploading `customers.csv` immediately displays a duplicate file warning via SHA-256 validation.
-2. **Execute ETL**:
-   - Navigate to **⚙️ ETL Monitor** (`/etl`).
-   - Click **"🚀 Trigger Pipeline"**.
-   - Observe real-time logs in the execution terminal.
-   - Switch to **"Quarantined Rejected Records"** to verify that malformed rows (e.g. invalid emails, negative prices, orphan customer foreign keys) were quarantined with raw JSON payloads without crashing the batch.
-3. **Analytics Dashboard**:
-   - Navigate to **📊 Dashboard** (`/`) to view live KPIs, monthly revenue curves, category distribution, and top-selling products.
-4. **Incremental Loading Test**:
-   - Upload `sample_data/customers_batch2.csv` and trigger ETL.
-   - Verify that new records are inserted, modified records updated in-place, and identical records skipped with zero duplicates created.
-5. **AI Sales Assistant**:
-   - Navigate to **💬 AI Assistant** (`/chat`).
-   - Ask natural language questions like *"Who is our top spending customer?"* or *"What is our revenue breakdown by category?"* to see live database numbers synthesized into executive summaries.
+1. Ensure your local PostgreSQL service is running (via pgAdmin or service manager).
+2. Open your terminal or `psql` console to create the database:
+   ```bash
+   psql -U postgres -c "CREATE DATABASE sales_analytics;"
+   ```
+3. Run the schema file to create all 7 tables, check constraints, foreign keys, and B-Tree indexes:
+   ```bash
+   psql -U postgres -d sales_analytics -f database/schema.sql
+   ```
+4. Verify table creation:
+   ```bash
+   psql -U postgres -d sales_analytics -c "\dt"
+   ```
+   *(You should see exactly 7 tables: `customers`, `products`, `orders`, `uploaded_files`, `etl_runs`, `etl_logs`, `rejected_records`)*.
+
+---
+
+### Step 3: Backend Setup & Execution (FastAPI)
+
+1. Open a new terminal and navigate to the `backend/` folder:
+   ```bash
+   cd backend
+   ```
+2. Create and activate a Python virtual environment:
+   ```bash
+   # Windows:
+   python -m venv venv
+   venv\Scripts\activate
+
+   # macOS / Linux:
+   # python3 -m venv venv
+   # source venv/bin/activate
+   ```
+3. Install the required backend dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Configure your environment variables in `backend/.env`:
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=sales_analytics
+   DB_USER=postgres
+   DB_PASSWORD=your_postgres_password
+   UPLOAD_DIR=uploads
+   ```
+5. Start the FastAPI development server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+   * **API Service Running:** `http://127.0.0.1:8000`
+   * **Interactive Swagger Documentation:** `http://127.0.0.1:8000/docs`
+
+---
+
+### Step 4: Frontend Setup & Execution (React.js)
+
+1. Open a second terminal window and navigate to the `frontend/` folder:
+   ```bash
+   cd frontend
+   ```
+2. Install frontend packages:
+   ```bash
+   npm install
+   ```
+3. Launch the Vite local development server:
+   ```bash
+   npm run dev
+   ```
+4. Open your browser and navigate to:
+   ```
+   http://localhost:5173
+   ```
+
+---
+
+## 🧪 End-to-End System Workflow Execution
+
+Once both servers are running, follow this exact sequence to populate and verify your platform:
+
+### 1. Upload Datasets (`/upload`)
+1. Click **Upload Data** in the left sidebar (`http://localhost:5173/upload`).
+2. Upload the baseline CSV files from the `sample_data/` folder **in order of entity hierarchy**:
+   * Select **Entity Type: Customers** $\rightarrow$ choose `sample_data/customers.csv` $\rightarrow$ click **Upload CSV to Staging**.
+   * Select **Entity Type: Products** $\rightarrow$ choose `sample_data/products.csv` $\rightarrow$ click **Upload CSV to Staging**.
+   * Select **Entity Type: Orders** $\rightarrow$ choose `sample_data/orders.csv` $\rightarrow$ click **Upload CSV to Staging**.
+3. **Duplicate Detection Test:** Try uploading `customers.csv` a second time. The system will display an **amber duplicate warning banner**, demonstrating content-based SHA-256 hash deduplication.
+
+### 2. Execute the ETL Pipeline (`/etl`)
+1. Click **ETL Monitor** in the left sidebar (`http://localhost:5173/etl`).
+2. Select **Incremental Mode** and click **🚀 Trigger Pipeline**.
+3. Watch the dark terminal viewer display real-time execution logs (`INFO`, `WARNING`, `ERROR`).
+4. Switch to the **"Quarantined Rejected Records"** tab:
+   * Observe how dirty records (e.g. invalid emails, negative prices, and orphan foreign key references) were safely intercepted and stored in `rejected_records` with raw JSON payloads without crashing the batch.
+
+### 3. Verify the Analytics Dashboard (`/`)
+1. Click **Dashboard** in the sidebar.
+2. View real-time aggregated metrics:
+   * **4 Executive KPI Cards:** Total Revenue, Total Orders, Active Customers, Average Order Value.
+   * **Monthly Revenue Trend:** Interactive Recharts line chart showing month-over-month revenue curves.
+   * **Revenue by Category:** Donut/Pie chart displaying percentage distribution across categories.
+   * **Top 5 Products:** Horizontal bar chart ranking best-selling catalog items.
+   * **Order Status Breakdown:** Grid summary of orders by status.
+
+### 4. Test Incremental Loading (`/upload` & `/etl`)
+1. Go back to **Upload Data** and upload `sample_data/customers_batch2.csv`.
+2. Return to **ETL Monitor** and click **Trigger Pipeline**.
+3. Observe the row metrics in the run history:
+   * New customers are inserted.
+   * Existing customers with modified details are updated in-place.
+   * Unchanged customers are skipped.
+   * **Zero duplicate records are created in PostgreSQL**, confirming full pipeline idempotency.
+
+### 5. Explore Data Tables (`/customers`, `/products`, `/orders`)
+* **Customers:** Search by customer name/email, filter by country dropdown, paginate across pages, and click **"View Orders"** to drill down into a customer's specific purchase history in a modal.
+* **Products:** Filter catalog items by category and observe color-coded low-stock inventory warning badges.
+* **Orders:** Inspect transaction records with status tags (`completed`, `shipped`, `pending`, `cancelled`, `returned`).
