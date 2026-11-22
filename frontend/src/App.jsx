@@ -1,19 +1,19 @@
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
-import Dashboard   from "./pages/Dashboard";
-import Customers   from "./pages/Customers";
-import Products    from "./pages/Products";
-import Orders      from "./pages/Orders";
-import Upload      from "./pages/Upload";
-import ETLMonitor  from "./pages/ETLMonitor";
-import Chat        from "./pages/chat";
+import Dashboard from "./pages/Dashboard";
+import Customers from "./pages/Customers";
+import Products from "./pages/Products";
+import Orders from "./pages/Orders";
+import Upload from "./pages/Upload";
+import ETLMonitor from "./pages/ETLMonitor";
+// import Chat        from "./pages/chat";
 const navItems = [
-  { path: "/",            label: "📊 Dashboard"    },
-  { path: "/customers",   label: "👥 Customers"    },
-  { path: "/products",    label: "📦 Products"     },
-  { path: "/orders",      label: "🧾 Orders"       },
-  { path: "/upload",      label: "📁 Upload CSV"   },
-  { path: "/etl",         label: "⚙️ ETL Monitor"  },
-  { path: "/chat",        label: "💬 Chatbot"          }
+  { path: "/", label: "📊 Dashboard" },
+  { path: "/customers", label: "👥 Customers" },
+  { path: "/products", label: "📦 Products" },
+  { path: "/orders", label: "🧾 Orders" },
+  { path: "/upload", label: "📁 Upload CSV" },
+  { path: "/etl", label: "⚙️ ETL Monitor" },
+  // { path: "/chat",        label: "💬 Chatbot"          }
 ];
 
 export default function App() {
@@ -34,10 +34,9 @@ export default function App() {
                 to={item.path}
                 end={item.path === "/"}
                 className={({ isActive }) =>
-                  `block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-300 hover:bg-gray-700"
+                  `block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-300 hover:bg-gray-700"
                   }`
                 }
               >
@@ -53,13 +52,13 @@ export default function App() {
         {/* Main Content */}
         <main className="flex-1 overflow-auto">
           <Routes>
-            <Route path="/"           element={<Dashboard />}  />
-            <Route path="/customers"  element={<Customers />}  />
-            <Route path="/products"   element={<Products />}   />
-            <Route path="/orders"     element={<Orders />}     />
-            <Route path="/upload"     element={<Upload />}     />
-            <Route path="/etl"        element={<ETLMonitor />} />
-            <Route path="/chat"       element={<Chat />}       />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/etl" element={<ETLMonitor />} />
+            {/* <Route path="/chat"       element={<Chat />}       /> */}
           </Routes>
         </main>
 

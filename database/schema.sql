@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS customers (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-
+select * from customers;
 -- 2. PRODUCTS
 CREATE TABLE IF NOT EXISTS products (
     product_id VARCHAR(20) PRIMARY KEY,
@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+select * from products;
 
 -- 3. ORDERS
 CREATE TABLE IF NOT EXISTS orders (
@@ -62,6 +63,8 @@ CREATE TABLE IF NOT EXISTS etl_runs (
     rows_unchanged INTEGER NOT NULL DEFAULT 0,
     rows_rejected INTEGER NOT NULL DEFAULT 0
 );
+
+select * from etl_runs;
 
 -- 2. Uploaded Files: Tracks files received via the frontend/API
 CREATE TABLE IF NOT EXISTS uploaded_files (
@@ -112,3 +115,4 @@ CREATE TABLE IF NOT EXISTS rejected_records (
 );
 
 CREATE INDEX IF NOT EXISTS idx_rejected_run ON rejected_records(run_id);
+

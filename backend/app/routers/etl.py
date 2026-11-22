@@ -10,7 +10,7 @@ router = APIRouter(prefix="/etl", tags=["ETL"])
 # ─────────────────────────────────────────────
 # TRIGGER ETL PIPELINE
 # ─────────────────────────────────────────────
-
+ 
 @router.post("/run")
 def trigger_etl(
     mode: str = "incremental",

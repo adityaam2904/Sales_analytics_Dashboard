@@ -1,11 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import test_connection
-from app.routers import upload 
-from app.routers import etl
-from app.routers import dashboard
-from app.routers import data
-from app.routers import chat
+from app.routers import upload , etl, dashboard, data
 app = FastAPI(
     title="Sales Analytics API",
     description="Backend API for the Sales Analytics Dashboard",
@@ -31,7 +27,7 @@ app.include_router(upload.router)
 app.include_router(etl.router)
 app.include_router(dashboard.router)
 app.include_router(data.router)
-app.include_router(chat.router)
+# app.include_router(chat.router)
 
 @app.get("/")
 def root():

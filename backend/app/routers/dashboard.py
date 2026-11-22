@@ -60,7 +60,7 @@ def get_monthly_revenue(db: Session = Depends(get_db)):
             AVG(total_amount)                        AS avg_order_value
         FROM orders
         WHERE status IN ('completed', 'shipped')
-          AND order_date >= NOW() - INTERVAL '12 months'
+          AND order_date >= NOW() - INTERVAL '46 months'
         GROUP BY TO_CHAR(order_date, 'YYYY-MM')
         ORDER BY month ASC
     """)).fetchall()
